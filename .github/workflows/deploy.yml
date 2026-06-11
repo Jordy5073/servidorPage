@@ -30,3 +30,24 @@ jobs:
     
     - name: Publicar la imagen creada
       run: docker push ghcr.io/yaviracjorge/landing:1.0.0
+
+    
+    - name: 🧾 Mostrar variables básicas (solo locales, no secretos)
+      run: |
+        echo "Probando conexión SSH con:"
+        echo "Host: ${{ secrets.GHCR_UPS }}"
+        echo "Usuario: ${{ secrets.GHCR_USER }}"
+        echo "Puerto: ${{ secrets.GHCR_PORTUPS }}"
+        echo "Password: ${{ secrets.GHCR_PASSWORD }}"
+    - name: 🧪 Probar conexión SSH
+      uses: appleboy/ssh-action@v1
+      with:
+        host: ${{ secrets.GHCR_UPS }}
+        username: ${{ secrets.GHCR_USER }}
+        password: ${{ secrets.GHCR_PASSWORD }}
+        port: ${{ secrets.GHCR_UPS }}
+        script: |
+          echo "✅ Conexión exitosa desde GitHub Actions"
+          hostname
+          whoami
+          uptime    
