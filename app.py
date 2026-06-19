@@ -2,115 +2,121 @@ from flask import Flask, render_template_string
 
 app = Flask(__name__)
 
-HTML = """
+# Diseño HTML, CSS y JS integrado en una sola cadena de texto
+HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reloj Digital</title>
-
+    <title>Landing Page - Reloj Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    
     <style>
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:'Segoe UI', sans-serif;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        body{
-            height:100vh;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            background:linear-gradient(135deg,#0f172a,#1e293b,#334155);
-            overflow:hidden;
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            overflow: hidden;
         }
 
-        .container{
-            text-align:center;
-            background:rgba(255,255,255,0.08);
-            backdrop-filter:blur(15px);
-            padding:50px;
-            border-radius:30px;
-            box-shadow:0 0 30px rgba(0,0,0,0.4);
-            color:white;
-            width:90%;
-            max-width:600px;
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 3rem 4rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border: 1px rgba(255, 255, 255, 0.1) solid;
         }
 
-        h1{
-            font-size:3rem;
-            margin-bottom:20px;
-            color:#38bdf8;
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 1.5rem;
+            color: #00f2fe;
         }
 
-        .clock{
-            font-size:5rem;
-            font-weight:bold;
-            letter-spacing:4px;
-            color:#fff;
-            text-shadow:0 0 20px #38bdf8;
+        .clock {
+            font-size: 4.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
         }
 
-        .date{
-            margin-top:20px;
-            font-size:1.5rem;
-            color:#cbd5e1;
+        .date {
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: #a5b1c2;
+            letter-spacing: 1px;
         }
 
-        .footer{
-            margin-top:30px;
-            color:#94a3b8;
+        footer {
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>⏰ Reloj Digital</h1>
-
-    <div class="clock" id="clock">
-        00:00:00
+    <div class="container">
+        <h1>Tiempo Actual</h1>
+        <div class="clock" id="clock">00:00:00</div>
+        <div class="date" id="date">Cargando fecha...</div>
     </div>
 
-    <div class="date" id="date">
-        Cargando fecha...
-    </div>
+    <footer>© 2026 Landing Page Temporal</footer>
 
-    <div class="footer">
-        Landing Page con Flask
-    </div>
-</div>
+    <script>
+        function updateClock() {
+            const now = new Date();
+            
+            // Formatear la hora
+            let hours = String(now.getHours()).padStart(2, '0');
+            let minutes = String(now.getMinutes()).padStart(2, '0');
+            let seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            document.getElementById('clock').textContent = ${hours}:${minutes}:${seconds};
+            
+            // Formatear la fecha en español
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            let dateString = now.toLocaleDateString('es-ES', options);
+            
+            // Capitalizar la primera letra del día
+            dateString = dateString.charAt(0).toUpperCase() + dateString.slice(1);
+            
+            document.getElementById('date').textContent = dateString;
+        }
 
-<script>
-function updateClock(){
-    const now = new Date();
-
-    const time = now.toLocaleTimeString('es-EC');
-    const date = now.toLocaleDateString('es-EC',{
-        weekday:'long',
-        year:'numeric',
-        month:'long',
-        day:'numeric'
-    });
-
-    document.getElementById("clock").innerHTML = time;
-    document.getElementById("date").innerHTML =
-        date.charAt(0).toUpperCase() + date.slice(1);
-}
-
-setInterval(updateClock,1000);
-updateClock();
-</script>
-
+        // Ejecutar inmediatamente y luego cada segundo
+        updateClock();
+        setInterval(updateClock, 1000);
+    </script>
 </body>
 </html>
 """
 
-@app.route("/")
+@app.route('/')
 def home():
-    return render_template_string(HTML)
+    # Usamos render_template_string para no necesitar una carpeta /templates
+    return render_template_string(HTML_TEMPLATE)
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+if __name__ == '__main__':
+    # Configurado explícitamente para el puerto 5000
+    app.run(debug=True, port=5000)
