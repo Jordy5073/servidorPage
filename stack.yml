@@ -10,11 +10,13 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.jordy.entrypoints=http"
-        - "traefik.http.routers.jordy.rule=Host(jordy.byronrm.com)"
+        # AÑADIDAS LAS COMILLAS INVERTIDAS EN EL HOST:
+        - "traefik.http.routers.jordy.rule=Host(`jordy.byronrm.com`)"
         - "traefik.http.middlewares.jordy-https-redirect.redirectscheme.scheme=https"
         - "traefik.http.routers.jordy.middlewares=jordy-https-redirect"
         - "traefik.http.routers.jordy-secure.entrypoints=https"
-        - "traefik.http.routers.jordy-secure.rule=Host(jordy.byronrm.com)"
+        # AÑADIDAS LAS COMILLAS INVERTIDAS EN EL HOST:
+        - "traefik.http.routers.jordy-secure.rule=Host(`jordy.byronrm.com`)"
         - "traefik.http.routers.jordy-secure.tls=true"
         - "traefik.http.routers.jordy-secure.tls.certresolver=http"
         - "traefik.http.routers.jordy-secure.service=jordy"
