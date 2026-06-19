@@ -1,1 +1,25 @@
 version: '3.9'
+
+services:
+  jordy:
+    image: ghcr.io/jordy5073/landing:1.0.0
+    networks:
+      - traefik-public
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.jordy.entrypoints=http"
+        - "traefik.http.routers.jordy.rule=Host(jordy.byronrm.com)"
+        - "traefik.http.middlewares.jordy-https-redirect.redirectscheme.scheme=https"
+        - "traefik.http.routers.jordy.middlewares=jordy-https-redirect"
+        - "traefik.http.routers.jordy-secure.entrypoints=https"
+        - "traefik.http.routers.jordy-secure.rule=Host(jordy.byronrm.com)"
+        - "traefik.http.routers.jordy-secure.tls=true"
+        - "traefik.http.routers.jordy-secure.tls.certresolver=http"
+        - "traefik.http.routers.jordy-secure.service=jordy"
+        - "traefik.http.services.jordy.loadbalancer.server.port=5000"
+        - "traefik.docker.network=traefik-public"
+networks:
+  traefik-public:
+    external: true
