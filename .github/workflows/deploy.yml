@@ -49,7 +49,7 @@ jobs:
           echo "✅ Conexión exitosa desde GitHub Actions"
           touch ejemplo.txt     
     
-        - name: 🧪 Pasar los archivos desde git al VPS
+    - name: 🧪 Pasar los archivos desde git al VPS
       uses: appleboy/scp-action@v1
       with:
         host: ${{ secrets.VPS_HOST }}
